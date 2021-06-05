@@ -4,10 +4,13 @@ module.exports = {
 	args: true,
 	usage: '<arguments>',
 	execute(message, args) {
+		
+		//check if the args are "secret", and if it is, dysplay a secret
 		if (args[0] === 'secret') {
 			return message.channel.send('Wow, I didn\'t think you would try this, congrats for finding it.');
 		}
 
+		//dysplay the arguments
 		message.channel.send(`First argument: ${args[0]}`);
 		
 		if (args[1]) {

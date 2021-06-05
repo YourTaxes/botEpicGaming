@@ -1,0 +1,6 @@
+{
+    "prefix":"!",
+    "devrole":"Bot-Dev",
+    "token":"<INSERT YOUR DISCROD BOT TOKEN HERE>",
+    "key":"<INSERT YOUR HYPIXEL API KEY HERE IF YOU ARE USING IT>"
+}

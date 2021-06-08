@@ -4,9 +4,7 @@ module.exports = {
 	async execute(message, commandArgs, currency, client) {
 		const currentAmount = currency.getBalance(message.author.id);
 		const transferAmount = commandArgs.split(/ +/).find(arg => !/<@!?\d+>/.test(arg));
-		if (!message.mentions.users) {
-            return message.channel.send('you need to tag someone to send to.');
-        }
+		
         const transferTarget = message.mentions.users.first();
 
 		if (!transferAmount || isNaN(transferAmount)) return message.channel.send(`Sorry ${message.author}, that's an invalid amount`);
@@ -18,6 +16,7 @@ module.exports = {
 		    currency.add(transferTarget.id, transferAmount);
         } catch (error) {
             message.reply('You need to tag a user to to transfer to');
+            console.error(error);
         }
 
 		return message.channel.send(`Successfully transferred ${transferAmount}💰 to ${transferTarget.tag}. Your current balance is ${currency.getBalance(message.author.id)}💰`);

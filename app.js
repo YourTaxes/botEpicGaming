@@ -56,12 +56,12 @@ client.on('message', async message => {
 	if (!message.content.startsWith(PREFIX)) return;
 	const input = message.content.slice(PREFIX.length).trim();
 	if (!input.length) return;
-	const [, command, commandArgs] = input.match(/(\w+)\s*([\s\S]*)/);
-	
-	if (!client.commands.has(command)) return;
+	const [, commandName, commandArgs] = input.match(/(\w+)\s*([\s\S]*)/);
+
+	const command = client.commands.get(commandName);
 	
 	try {
-		client.commands.get(command).execute(message, commandArgs, currency, client);
+		command.execute(message, commandArgs, currency, client);
 	} catch (error) {
 		console.error(error);
 		message.reply('there was an error trying to excecute that command!');

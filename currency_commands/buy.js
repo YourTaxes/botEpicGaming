@@ -3,6 +3,8 @@ const { Op } = require('sequelize');
 module.exports = {
 	name: 'buy',
 	description: 'used to buy an item',
+    args: true,
+    usage: "<item>",
 	async execute(message, commandArgs, currency, client) {
 		const item = await CurrencyShop.findOne({ where: { name: { [Op.like]: commandArgs } } });
 		if (!item) return message.channel.send('That item doesn\'t exist.');

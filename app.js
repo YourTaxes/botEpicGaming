@@ -1,3 +1,4 @@
+const fs = require('fs');
 const config = require('./config');
 const Discord = require('discord.js');
 
@@ -5,7 +6,15 @@ const client = new Discord.Client();
 const { Users, CurrencyShop } = require('./dbObjects');
 const { Op } = require('sequelize');
 const currency = new Discord.Collection();
+client.commands = new Discord.Collection();
 const PREFIX = config.prefix;
+
+const commandFiles = fs.readdirSync('./currency_commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const command = require(`./currency_commands/${file}`);
+	client.commands.set(command.name, command);
+}
 
 /*
  * Make sure you are on at least version 5 of Sequelize! Version 4 as used in this guide will pose a security threat.
@@ -50,8 +59,8 @@ client.on('message', async message => {
 	const [, command, commandArgs] = input.match(/(\w+)\s*([\s\S]*)/);
 
 	if (command === 'balance') {
-		const target = message.mentions.users.first() || message.author;
-		return message.channel.send(`${target.tag} has ${currency.getBalance(target.id)}💰`);
+		//const target = message.mentions.users.first() || message.author;
+		//return message.channel.send(`${target.tag} has ${currency.getBalance(target.id)}💰`);
 	} else if (command === 'inventory') {
 		const target = message.mentions.users.first() || message.author;
 		const user = await Users.findOne({ where: { user_id: target.id } });
@@ -96,6 +105,15 @@ client.on('message', async message => {
 				.join('\n'),
 			{ code: true },
 		);
+	}
+	
+	if (!client.commands.has(command)) return;
+	
+	try {
+		client.commands.get(command).execute(message, input, currency);
+	} catch (error) {
+		console.error(error);
+		message.reply('there was an error trying to excecute that command!');
 	}
 });
 

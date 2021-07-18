@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'transfer',
-	description: 'transfer moneyto a user',
+	description: 'transfer money to a user',
 	async execute(message, commandArgs, currency, client) {
 		const currentAmount = currency.getBalance(message.author.id);
 		const transferAmount = commandArgs.split(/ +/).find(arg => !/<@!?\d+>/.test(arg));

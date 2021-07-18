@@ -3,7 +3,7 @@ const config = require('./config');
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
-const { Users, CurrencyShop } = require('./dbObjects');
+const { Users, CurrencyShop, UserItems } = require('./dbObjects');
 const { Op } = require('sequelize');
 const currency = new Discord.Collection();
 client.commands = new Discord.Collection();
@@ -59,13 +59,22 @@ client.on('message', async message => {
 	const [, commandName, commandArgs] = input.match(/(\w+)\s*([\s\S]*)/);
 
 	const command = client.commands.get(commandName);
-	
+
+	if (!command) {
+		return;
+	}
+
+	if (command.dev && !(message.member.roles.cache.find(r => r.name === config.devrole))) {
+		return message.reply('You are not this bot\'s developer, so you can\'t use this command.');
+	}
+
 	try {
 		command.execute(message, commandArgs, currency, client);
 	} catch (error) {
 		console.error(error);
 		message.reply('there was an error trying to excecute that command!');
 	}
+
 });
 
 client.login(config.token);

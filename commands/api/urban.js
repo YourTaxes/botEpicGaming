@@ -32,7 +32,7 @@ module.exports = {
         
         //create an embed for the serch results
         const embed = new Discord.MessageEmbed()
-            .setColor('#EFFF00')
+            .setColor('#efff00')
             .setTitle(answer.word)
             .setURL(answer.permalink)
             .addFields(

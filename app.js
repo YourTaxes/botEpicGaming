@@ -64,7 +64,7 @@ client.on('message', async message => {
 		return;
 	}
 
-	if (command.dev && !(message.member.roles.cache.find(r => r.name === config.devrole))) {
+	if (command.dev && !(message.author.id === config.devid)) {
 		return message.reply('You are not this bot\'s developer, so you can\'t use this command.');
 	}
 

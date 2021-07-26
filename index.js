@@ -1,7 +1,7 @@
 //requiring things here
 const fs = require('fs');
 const Discord = require('discord.js');
-const { prefix, token, devrole} = require('./config.json');
+const { prefix, token, devid} = require('./config.json');
 
 //creating the client and instantiate the command collection
 const client = new Discord.Client();
@@ -48,7 +48,7 @@ client.on('message', message => {
 	}
 
 	//make sure that dev commands can only be excecuted by devs
-	if (command.dev && !(message.member.roles.cache.find(r => r.name === devrole))) {
+	if (command.dev && !(message.author.id === devid)) {
 		return message.reply('You are not this bot\'s developer, so you can\'t use this command.');
 	}
 

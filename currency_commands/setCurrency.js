@@ -2,6 +2,7 @@ module.exports = {
     name: 'setCurrency',
     description: 'set a user\'s balance',
     dev: true,
+    usage: '<amount> <user>',
     async execute(message, commandArgs, currency, client) {
         const transferAmount = commandArgs.split(/ +/).find(arg => !/<@!?\d+>/.test(arg));
         const transferTarget = message.mentions.users.first() || message.author;

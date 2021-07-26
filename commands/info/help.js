@@ -1,5 +1,15 @@
 //require the prefix
+const Discord = require('discord.js');
+const fs = require('fs');
 const { prefix } = require('../../config.json');
+const currnecycommands = new Discord.Collection;
+
+const ccmandfolder = fs.readdirSync('./currency_commands');
+
+for (const file of ccmandfolder) {
+    const ccomand = require(`../../currency_commands/${file}`);
+    currnecycommands.set(ccomand.name, ccomand);
+}
 
 module.exports = {
     name: 'help',
@@ -15,6 +25,8 @@ module.exports = {
         if (!args.length) {
             data.push('Here\'s a list of all my commands:');
             data.push(commands.map(command => command.name).join(', \n'));
+            data.push('\nThese are the currency commands:');
+            data.push(currnecycommands.map(ccomand => ccomand.name).join(', \n'));
             data.push(`\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`);
 
             return message.author.send(data, { split: true})
@@ -31,8 +43,10 @@ module.exports = {
         //get the name of the command
         const name = args[0].toLowerCase();
 
+        const allcommands = commands.concat(currnecycommands);
+
         //find the command file
-        const command = commands.get(name) || commands.find(c => c.aliases && c.aliases.includes(name));
+        const command = allcommands.get(name) || allcommands.find(c => c.aliases && c.aliases.includes(name));
 
         //check the requested command is valad
         if (!command) {
